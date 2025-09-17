@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Directorio Telefónico - Intranet</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <header class="bg-dark-blue text-white py-3">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="m-0"><i class="fas fa-phone-alt me-2"></i>Directorio Telefónico</h1>
+                <div class="d-flex align-items-center">
+                    <img src="img/logo.png" alt="Logo Empresa" class="logo-header me-2" style="cursor: pointer;">
+                    <!-- Botón de logout (visible solo cuando está logueado) -->
+                    <button id="logoutBtn" class="btn btn-sm btn-outline-light logout-btn" style="display: none;">
+                        <i class="fas fa-sign-out-alt me-1"></i> Salir
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container my-4">
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <input type="text" id="searchInput" class="form-control" placeholder="Buscar por nombre o extensión...">
+                    <button class="btn btn-yellow" type="button" id="searchBtn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <button class="btn btn-blue admin-control" id="addContactBtn" style="display: none;">
+                    <i class="fas fa-plus me-2"></i>Agregar Contacto
+                </button>
+            </div>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-header bg-yellow text-dark-blue">
+                <h3 class="m-0"><i class="fas fa-users me-2"></i>Listado de Contactos</h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+
+                <!-- En la tabla, modifica la columna de acciones -->
+                <table class="table table-hover" id="directoryTable">
+                    <thead>
+                        <tr class="bg-light-blue text-white">
+                            <th>Gerencia/Área</th>
+                            <th>Nombre</th>
+                            <th>Extensión</th>
+                            <th class="admin-actions" style="display: none;">Accion es</th>
+                        </tr>
+                    </thead>
+                    <tbody id="directoryBody">
+                        <!-- Los datos se cargarán dinámicamente -->
+                    </tbody>
+                </table>
+
+                </div>
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <div class="fw-light text-muted" id="totalContacts">Mostrando 0 contactos</div>
+                    <nav>
+                        <ul class="pagination justify-content-end m-0" id="pagination">
+                            <!-- Paginación dinámica -->
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal para agregar/editar contacto -->
+    <div class="modal fade" id="contactModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-yellow text-dark-blue">
+                    <h5 class="modal-title" id="modalTitle">Agregar Nuevo Contacto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="contactForm">
+                        <input type="hidden" id="contactId">
+                        <div class="mb-3">
+                            <label for="gerencia" class="form-label">Gerencia/Área</label>
+                            <input type="text" class="form-control" id="gerencia" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="nombre" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="extension" class="form-label">Extensión</label>
+                            <input type="text" class="form-control" id="extension" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-blue" id="saveContactBtn">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Login -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header bg-yellow text-dark-blue">
+                    <h5 class="modal-title">Acceso Administrativo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Usuario</label>
+                            <input type="text" class="form-control" id="username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Contraseña</label>
+                            <input type="password" class="form-control" id="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-blue w-100">
+                            <i class="fas fa-sign-in-alt me-2"></i>Ingresar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery, Bootstrap JS y nuestro script -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
