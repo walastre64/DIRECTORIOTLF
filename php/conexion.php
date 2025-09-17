@@ -1,10 +1,10 @@
 <?php
 // conexion.php
-$serverName = "DCBAHIA\MSSQLSERVER2014";
+$serverName = "localhost";
 $connectionOptions = array(
     "Database" => "DIRECTORIO",
     "Uid" => "sa",
-    "PWD" => "Ec14312183.-"
+    "PWD" => ""
 );
 
 // Establecer conexión
